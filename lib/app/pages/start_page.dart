@@ -8,16 +8,81 @@ class StartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.deepPurple,
-      body: Column(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
-              color: Colors.deepPurple,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 165.0,
+                          width: 165.0,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/black-woman.png'),
+                              fit: BoxFit.fill,
+                            ),
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Container(
+                          height: 165.0,
+                          width: 165.0,
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/old-man.png'),
+                              fit: BoxFit.fill,
+                            ),
+                            color: Colors.deepPurple.shade800,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 165.0,
+                          width: 165.0,
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/black-man.png'),
+                              fit: BoxFit.fill,
+                            ),
+                            color: Colors.deepPurple.shade800,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Container(
+                          height: 165.0,
+                          width: 165.0,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/white-woman.png'),
+                              fit: BoxFit.fill,
+                            ),
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          Expanded(
-            child: Container(
+            Container(
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -31,21 +96,81 @@ class StartPage extends StatelessWidget {
                       spreadRadius: 10,
                     )
                   ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Aproveite a nova experiência de conversar com seus amigos!',
-                    style: GoogleFonts.inter(
-                      color: Colors.black,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 25,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    //TEXT
+                    Column(
+                      children: [
+                        Text(
+                          'Aproveite a nova experiência de conversar com seus amigos!',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Conecte-se com quem você mais ama de graça!',
+                          style: GoogleFonts.inter(
+                            fontSize: 15,
+                            color: Colors.black54,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 50,
+                    ),
+
+                    //SIGNIN/SIGNOUT BUTTON
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                        child: Text(
+                          'Começar',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    //CREDITS
+                    Text(
+                      'Desenvolvido por Deheane',
+                      style: GoogleFonts.inter(
+                        fontSize: 15,
+                        color: Colors.deepPurple,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
