@@ -1,5 +1,6 @@
 import 'package:clean_chat/app/data/mock/chats_data.dart';
 import 'package:clean_chat/app/data/models/contact_model.dart';
+import 'package:clean_chat/app/shared/widgets/contact_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffFAFAFA),
+      backgroundColor: Color(0xFFEAEAEA),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -128,90 +129,8 @@ class _HomePageState extends State<HomePage> {
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemCount: _contacts.length,
-                  itemBuilder: (context, index) => Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 20,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              //AVATAR
-                              Badge(
-                                alignment: Alignment.bottomRight,
-                                smallSize: 15,
-                                backgroundColor: _contacts[index].isOnline
-                                    ? Colors.green
-                                    : const Color(0xffcacaca),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(1000),
-                                  child: Container(
-                                    color: Colors.deepPurple,
-                                    height: 70,
-                                    child: Image.asset(
-                                      _contacts[index].avatarUrl,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(
-                                width: 10,
-                              ),
-
-                              //TEXTS
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _contacts[index].name,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      _contacts[index].lastMessageIsMy
-                                          ? Container(
-                                              margin: const EdgeInsets.only(
-                                                right: 5,
-                                              ),
-                                              child: const Icon(
-                                                Icons.done_all_rounded,
-                                                size: 15,
-                                                color: Color.fromARGB(
-                                                    255, 132, 132, 132),
-                                              ),
-                                            )
-                                          : Container(),
-                                      Text(
-                                        _contacts[index].lastMessage,
-                                        style: const TextStyle(
-                                          color: Color.fromARGB(
-                                              255, 132, 132, 132),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-
-                          //LAST ENTRY DATE
-                          Text(
-                            DateFormat.jm()
-                                .format(_contacts[index].lastEntry)
-                                .toString(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  itemBuilder: (context, index) =>
+                      ContactCard(contact: _contacts[index]),
                 ),
               ),
             ],

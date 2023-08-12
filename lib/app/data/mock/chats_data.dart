@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:clean_chat/app/data/models/contact_model.dart';
+import 'package:clean_chat/app/data/models/message_model.dart';
 
 class ChatsData {
   List<ContactModel> getContacts() {
     List<ContactModel> contacts = [
       ContactModel(
-        id: "1",
+        id: "2",
         name: "John Doe",
         email: "john@example.com",
         avatarUrl: "assets/images/black-man.png",
@@ -15,7 +18,7 @@ class ChatsData {
         lastMessageIsMy: true,
       ),
       ContactModel(
-        id: "2",
+        id: "3",
         name: "Jane Smith",
         email: "jane@example.com",
         avatarUrl: "assets/images/black-woman.png",
@@ -26,7 +29,7 @@ class ChatsData {
         lastMessageIsMy: false,
       ),
       ContactModel(
-        id: "3",
+        id: "4",
         name: "Alex Johnson",
         email: "alex@example.com",
         avatarUrl: "assets/images/old-man.png",
@@ -37,7 +40,7 @@ class ChatsData {
         lastMessageIsMy: true,
       ),
       ContactModel(
-        id: "4",
+        id: "5",
         name: "Emily Brown",
         email: "emily@example.com",
         avatarUrl: "assets/images/white-woman.png",
@@ -50,5 +53,91 @@ class ChatsData {
     ];
 
     return contacts;
+  }
+
+  Stream<List<MessageModel>> getMockedMessageStream() {
+    final controller = StreamController<List<MessageModel>>();
+
+    List<MessageModel> sampleMessages = [
+      MessageModel(
+        message: "Olá, usuário 2! Como vai?",
+        date: DateTime.now().subtract(const Duration(minutes: 55)),
+        userId: "1",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Oi, usuário 1! Estou bem, obrigado!",
+        date: DateTime.now().subtract(const Duration(minutes: 50)),
+        userId: "2",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Preparado para a reunião de amanhã?",
+        date: DateTime.now().subtract(const Duration(minutes: 45)),
+        userId: "1",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Sim, já revisei os documentos.",
+        date: DateTime.now().subtract(const Duration(minutes: 40)),
+        userId: "2",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Ótimo! Nos vemos lá.",
+        date: DateTime.now().subtract(const Duration(minutes: 35)),
+        userId: "1",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Claro, até amanhã!",
+        date: DateTime.now().subtract(const Duration(minutes: 30)),
+        userId: "2",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Você já pensou em algumas ideias para o projeto?",
+        date: DateTime.now().subtract(const Duration(minutes: 25)),
+        userId: "1",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Sim, tenho algumas ideias interessantes.",
+        date: DateTime.now().subtract(const Duration(minutes: 20)),
+        userId: "2",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Mal posso esperar para ouvi-las!",
+        date: DateTime.now().subtract(const Duration(minutes: 15)),
+        userId: "1",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Vou preparar uma apresentação para compartilhar.",
+        date: DateTime.now().subtract(const Duration(minutes: 10)),
+        userId: "2",
+        wasViewed: true,
+      ),
+      MessageModel(
+        message: "Isso é ótimo! Acho que estamos no caminho certo.",
+        date: DateTime.now().subtract(const Duration(minutes: 5)),
+        userId: "1",
+        wasViewed: false,
+      ),
+      MessageModel(
+        date: DateTime.now().subtract(const Duration(minutes: 0)),
+        userId: "1",
+        wasViewed: false,
+        imageUrl:
+            'https://blog-static.petlove.com.br/wp-content/uploads/2020/11/gato-preto-2.jpg',
+      ),
+
+      // ... continue adicionando mais mensagens
+    ];
+
+    controller.add(sampleMessages);
+
+    return controller.stream;
   }
 }

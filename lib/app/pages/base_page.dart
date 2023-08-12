@@ -10,22 +10,22 @@ class BasePage extends StatefulWidget {
 }
 
 class _BasePageState extends State<BasePage> {
-  int index = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  int index = 1;
+  final PageController _pageController = PageController(initialPage: 1);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffFAFAFA),
+      backgroundColor: const Color(0xFFEAEAEA),
       body: SafeArea(
         child: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           children: [
-            HomePage(),
             Container(
               color: Colors.blue,
             ),
+            HomePage(),
             Container(
               color: Colors.green,
             ),
