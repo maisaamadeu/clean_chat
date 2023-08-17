@@ -1,4 +1,4 @@
-import 'package:clean_chat/app/pages/start_page.dart';
+import 'package:clean_chat/app/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppWidget extends StatelessWidget {
@@ -11,7 +11,7 @@ class AppWidget extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.light,
       ),
-      home: const StartPage(),
+      home: const SplashScreen(),
     );
   }
 }

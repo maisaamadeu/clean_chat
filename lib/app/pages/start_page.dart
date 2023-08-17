@@ -1,4 +1,6 @@
+import 'package:clean_chat/app/data/services/firebase_service.dart';
 import 'package:clean_chat/app/pages/base_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -139,9 +141,10 @@ class StartPage extends StatelessWidget {
                     SizedBox(
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          bool isLogged = true;
-                          if (isLogged) {
+                        onPressed: () async {
+                          User? user = await FirebaseService()
+                              .signInWithGoogle(context: context);
+                          if (user != null && context.mounted) {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -153,13 +156,23 @@ class StartPage extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepPurple,
                         ),
-                        child: Text(
-                          'Começar',
-                          style: GoogleFonts.inter(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/elements/google-logo.png',
+                              height: 20,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Começar',
+                              style: GoogleFonts.inter(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

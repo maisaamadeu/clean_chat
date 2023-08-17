@@ -31,42 +31,26 @@ class CustomBottomAppbar extends StatelessWidget {
           shape: const CircularNotchedRectangle(),
           color: Colors.white,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
                 icon: Icon(
-                  Icons.favorite,
+                  Icons.chat_rounded,
                   color: index == 0 ? Colors.deepPurple : Color(0xffcacaca),
                 ),
                 iconSize: 30,
                 onPressed: () => onPressed(0),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.chat_rounded,
-                  color: index == 1 ? Colors.deepPurple : Color(0xffcacaca),
-                ),
-                iconSize: 30,
-                onPressed: () => onPressed(1),
-              ),
               const SizedBox(
-                width: 10,
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.phone,
-                  color: index == 2 ? Colors.deepPurple : Color(0xffcacaca),
-                ),
-                iconSize: 30,
-                onPressed: () => onPressed(2),
+                width: 1,
               ),
               IconButton(
                 icon: Icon(
                   Icons.person,
-                  color: index == 3 ? Colors.deepPurple : Color(0xffcacaca),
+                  color: index == 1 ? Colors.deepPurple : Color(0xffcacaca),
                 ),
                 iconSize: 30,
-                onPressed: () => onPressed(3),
+                onPressed: () => onPressed(1),
               ),
             ],
           ),

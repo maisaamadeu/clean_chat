@@ -31,19 +31,22 @@ class ContactCard extends StatelessWidget {
               Row(
                 children: [
                   //AVATAR
-                  Badge(
-                    alignment: Alignment.bottomRight,
-                    smallSize: 15,
-                    backgroundColor: contact.isOnline
-                        ? Colors.green
-                        : const Color(0xffcacaca),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(1000),
-                      child: Container(
-                        color: Colors.deepPurple,
-                        height: 70,
-                        child: Image.asset(
-                          contact.avatarUrl,
+                  Hero(
+                    tag: contact.avatarUrl,
+                    child: Badge(
+                      alignment: Alignment.bottomRight,
+                      smallSize: 15,
+                      backgroundColor: contact.isOnline!
+                          ? Colors.green
+                          : const Color(0xffcacaca),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(1000),
+                        child: Container(
+                          color: Colors.deepPurple,
+                          height: 70,
+                          child: Image.asset(
+                            contact.avatarUrl,
+                          ),
                         ),
                       ),
                     ),
@@ -66,7 +69,7 @@ class ContactCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          contact.lastMessageIsMy
+                          contact.lastMessageIsMy ?? false
                               ? Container(
                                   margin: const EdgeInsets.only(
                                     right: 5,
@@ -79,7 +82,7 @@ class ContactCard extends StatelessWidget {
                                 )
                               : Container(),
                           Text(
-                            contact.lastMessage,
+                            contact.lastMessage ?? '',
                             style: const TextStyle(
                               color: Color.fromARGB(255, 132, 132, 132),
                             ),

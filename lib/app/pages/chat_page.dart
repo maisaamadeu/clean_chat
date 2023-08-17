@@ -33,18 +33,21 @@ class ChatPage extends StatelessWidget {
         title: Row(
           children: [
             //AVATAR
-            Badge(
-              alignment: Alignment.bottomRight,
-              smallSize: 15,
-              backgroundColor:
-                  contact.isOnline ? Colors.green : const Color(0xffcacaca),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(1000),
-                child: Container(
-                  color: Colors.deepPurple,
-                  height: 50,
-                  child: Image.asset(
-                    contact.avatarUrl,
+            Hero(
+              tag: contact.avatarUrl,
+              child: Badge(
+                alignment: Alignment.bottomRight,
+                smallSize: 15,
+                backgroundColor:
+                    contact.isOnline! ? Colors.green : const Color(0xffcacaca),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(1000),
+                  child: Container(
+                    color: Colors.deepPurple,
+                    height: 50,
+                    child: Image.asset(
+                      contact.avatarUrl,
+                    ),
                   ),
                 ),
               ),
@@ -67,10 +70,10 @@ class ChatPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  contact.isOnline ? "Online" : "Offline",
+                  contact.isOnline! ? "Online" : "Offline",
                   style: TextStyle(
                     fontSize: 14,
-                    color: contact.isOnline ? Colors.green : Colors.red,
+                    color: contact.isOnline! ? Colors.green : Colors.red,
                   ),
                 ),
               ],
@@ -99,12 +102,12 @@ class ChatPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Expanded(
               child: StreamBuilder(
-                stream: ChatsData().getMockedMessageStream(),
+                stream: ChatsData().getChat(),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   switch (snapshot.connectionState) {

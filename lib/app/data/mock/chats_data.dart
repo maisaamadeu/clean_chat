@@ -55,7 +55,7 @@ class ChatsData {
     return contacts;
   }
 
-  Stream<List<MessageModel>> getMockedMessageStream() {
+  Stream<List<MessageModel>> getChat() {
     final controller = StreamController<List<MessageModel>>();
 
     List<MessageModel> sampleMessages = [
