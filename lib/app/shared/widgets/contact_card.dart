@@ -1,12 +1,31 @@
 import 'package:clean_chat/app/data/models/contact_model.dart';
+import 'package:clean_chat/app/data/repositories/firebase_repository.dart';
 import 'package:clean_chat/app/pages/chat_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ContactCard extends StatelessWidget {
+class ContactCard extends StatefulWidget {
   const ContactCard({super.key, required this.contact});
 
   final ContactModel contact;
+
+  @override
+  State<ContactCard> createState() => _ContactCardState();
+}
+
+class _ContactCardState extends State<ContactCard> {
+  User? user;
+
+  void getUser() async {
+    user = await FirebaseRepository().getCurrentUser();
+  }
+
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +33,8 @@ class ContactCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ChatPage(contact: contact),
+            builder: (context) =>
+                ChatPage(contact: widget.contact, user: user!),
           ),
         );
       },
@@ -32,20 +52,20 @@ class ContactCard extends StatelessWidget {
                 children: [
                   //AVATAR
                   Hero(
-                    tag: contact.avatarUrl,
+                    tag: widget.contact.photoUrl,
                     child: Badge(
                       alignment: Alignment.bottomRight,
                       smallSize: 15,
-                      backgroundColor: contact.isOnline!
+                      backgroundColor: widget.contact.isOnline!
                           ? Colors.green
                           : const Color(0xffcacaca),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(1000),
                         child: Container(
                           color: Colors.deepPurple,
-                          height: 70,
-                          child: Image.asset(
-                            contact.avatarUrl,
+                          height: 60,
+                          child: Image.network(
+                            widget.contact.photoUrl,
                           ),
                         ),
                       ),
@@ -61,7 +81,7 @@ class ContactCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        contact.name,
+                        widget.contact.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -69,7 +89,7 @@ class ContactCard extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          contact.lastMessageIsMy ?? false
+                          widget.contact.lastMessageIsMy ?? false
                               ? Container(
                                   margin: const EdgeInsets.only(
                                     right: 5,
@@ -82,7 +102,7 @@ class ContactCard extends StatelessWidget {
                                 )
                               : Container(),
                           Text(
-                            contact.lastMessage ?? '',
+                            widget.contact.lastMessage ?? '',
                             style: const TextStyle(
                               color: Color.fromARGB(255, 132, 132, 132),
                             ),
@@ -96,7 +116,7 @@ class ContactCard extends StatelessWidget {
 
               //LAST ENTRY DATE
               Text(
-                DateFormat.jm().format(contact.lastEntry).toString(),
+                DateFormat.jm().format(widget.contact.lastEntry).toString(),
               ),
             ],
           ),

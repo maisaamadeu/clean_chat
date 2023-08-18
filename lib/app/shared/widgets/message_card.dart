@@ -4,14 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class MessageCard extends StatelessWidget {
-  const MessageCard({super.key, required this.message});
+  const MessageCard({super.key, required this.message, required this.userUid});
 
   final MessageModel message;
-  final String userId = '1';
+  final String userUid;
 
   @override
   Widget build(BuildContext context) {
-    final bool isUser = message.userId == userId;
+    final bool isUser = message.uid == userUid;
     return Container(
       margin: const EdgeInsets.only(
         bottom: 15,
@@ -50,7 +50,7 @@ class MessageCard extends StatelessWidget {
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                Positioned(
+                                const Positioned(
                                   child: CircularProgressIndicator(
                                     color: Colors.white,
                                   ),

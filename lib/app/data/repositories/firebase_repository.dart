@@ -31,8 +31,16 @@ class FirebaseRepository {
     return await _firebaseService.getContacts();
   }
 
-  Future<List<MessageModel?>> getChat() async {
-    return await _firebaseService.getChat();
+  Stream<List<ContactModel?>> getContactsStream() {
+    return _firebaseService.getContactsStream();
+  }
+
+  Future<List<MessageModel?>> getChat({required String friendUid}) async {
+    return await _firebaseService.getChat(friendUid: friendUid);
+  }
+
+  Stream<List<MessageModel?>> getChatStream({required String friendUid}) {
+    return _firebaseService.getChatStream(friendUid: friendUid);
   }
 
   Future<void> addContact() async {

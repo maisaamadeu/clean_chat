@@ -107,6 +107,7 @@ class FirebaseService {
     if (existingData.exists) {
       await userRef.update({
         'lastEntry': FieldValue.serverTimestamp(),
+        'isOnline': true,
       });
     } else {
       await userRef.set({
@@ -116,6 +117,7 @@ class FirebaseService {
         'uid': user.uid,
         'lastEntry': FieldValue.serverTimestamp(),
         'contacts': [],
+        'isOnline': true,
       });
     }
   }
@@ -127,7 +129,8 @@ class FirebaseService {
 
     if (existingData.exists) {
       await userRef.update({
-        'last_entry': FieldValue.serverTimestamp(),
+        'lastEntry': FieldValue.serverTimestamp(),
+        'isOnline': true,
       });
     }
   }
@@ -157,6 +160,7 @@ class FirebaseService {
   }
 
   Future<List<ContactModel?>> getContacts() async {
+    final List<ContactModel?> contactsModels = [];
     User? user = await getCurrentUser();
     if (user == null) {
       return [];
@@ -168,14 +172,120 @@ class FirebaseService {
 
     if (documentSnapshot.exists) {
       final data = documentSnapshot.data() as Map<String, dynamic>;
-      final displayName = data['displayName'] as String?;
+
+      final List<dynamic> contactsUID = data['contacts'];
+
+      for (var contact in contactsUID) {
+        final userRefContact =
+            FirebaseFirestore.instance.collection('users').doc(contact);
+
+        final DocumentSnapshot documentSnapshotContact =
+            await userRefContact.get();
+
+        Map<String, dynamic> contactData =
+            documentSnapshotContact.data() as Map<String, dynamic>;
+
+        ContactModel newContactModel = ContactModel.fromMap(contactData);
+
+        List<String> uids = [user.uid, newContactModel.uid];
+
+        uids.sort();
+
+        final userRefContactMessages = FirebaseFirestore.instance
+            .collection('chats')
+            .doc('${uids.first}_${uids.last}');
+
+        final DocumentSnapshot documentSnapshotContactMessages =
+            await userRefContactMessages.get();
+
+        if (documentSnapshotContactMessages.exists) {
+          Map<String, dynamic> messages =
+              documentSnapshotContactMessages.data() as Map<String, dynamic>;
+
+          if (messages.isNotEmpty) {
+            List<Map<String, dynamic>> messagesSorted =
+                List.from(messages['messages']);
+            messagesSorted.sort((a, b) {
+              Timestamp timestampA = a['date'];
+              Timestamp timestampB = b['date'];
+              DateTime dateTimeA = timestampA.toDate();
+              DateTime dateTimeB = timestampB.toDate();
+              return dateTimeB.compareTo(dateTimeA);
+            });
+
+            newContactModel.lastMessage =
+                (messagesSorted.first['message'] != '' &&
+                        messagesSorted.first['message'] != null
+                    ? messagesSorted.first['message']
+                    : (messagesSorted.first['imageUrl'] != '' &&
+                            messagesSorted.first['imageUrl'] != null
+                        ? messagesSorted.first['imageUrl']
+                        : null));
+
+            newContactModel.lastMessageIsMy =
+                messagesSorted.first['uid'] == user.uid;
+
+            newContactModel.haveUnreadMessages =
+                newContactModel.lastMessageIsMy!
+                    ? false
+                    : messagesSorted.first['wasViewed'];
+          }
+        }
+
+        contactsModels.add(newContactModel);
+      }
     }
 
-    return ChatsData().getContacts();
+    return contactsModels;
   }
 
-  Future<List<MessageModel?>> getChat() async {
-    return [];
+  Stream<List<ContactModel?>> getContactsStream() {
+    return Stream.fromFuture(getContacts());
+  }
+
+  Future<List<MessageModel?>> getChat({required String friendUid}) async {
+    User? user = await getCurrentUser();
+
+    List<String> uids = [user!.uid, friendUid];
+    List<MessageModel> messagesModels = [];
+
+    uids.sort();
+
+    final userRefContactMessages = FirebaseFirestore.instance
+        .collection('chats')
+        .doc('${uids.first}_${uids.last}');
+
+    final DocumentSnapshot documentSnapshotContactMessages =
+        await userRefContactMessages.get();
+
+    if (documentSnapshotContactMessages.exists) {
+      Map<String, dynamic> messages =
+          documentSnapshotContactMessages.data() as Map<String, dynamic>;
+
+      if (messages.isNotEmpty) {
+        List<Map<String, dynamic>> messagesSorted =
+            List.from(messages['messages']);
+        messagesSorted.sort((a, b) {
+          Timestamp timestampA = a['date'];
+          Timestamp timestampB = b['date'];
+          DateTime dateTimeA = timestampA.toDate();
+          DateTime dateTimeB = timestampB.toDate();
+          return dateTimeB.compareTo(dateTimeA);
+        });
+
+        for (var message in messagesSorted) {
+          MessageModel newMessage = MessageModel.fromMap(message);
+
+          messagesModels.add(newMessage);
+        }
+      }
+    }
+    messagesModels = messagesModels.reversed.toList();
+    return messagesModels;
+  }
+
+  Stream<List<MessageModel?>> getChatStream({required String friendUid}) {
+    return Stream.fromFuture(getChat(friendUid: friendUid));
   }
 
   Future<void> addContact() async {}

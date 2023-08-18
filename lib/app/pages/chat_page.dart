@@ -1,14 +1,17 @@
 import 'package:clean_chat/app/data/mock/chats_data.dart';
 import 'package:clean_chat/app/data/models/contact_model.dart';
 import 'package:clean_chat/app/data/models/message_model.dart';
+import 'package:clean_chat/app/data/repositories/firebase_repository.dart';
 import 'package:clean_chat/app/shared/widgets/message_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({super.key, required this.contact});
+  const ChatPage({super.key, required this.contact, required this.user});
 
   final ContactModel contact;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class ChatPage extends StatelessWidget {
           children: [
             //AVATAR
             Hero(
-              tag: contact.avatarUrl,
+              tag: contact.photoUrl,
               child: Badge(
                 alignment: Alignment.bottomRight,
                 smallSize: 15,
@@ -45,8 +48,8 @@ class ChatPage extends StatelessWidget {
                   child: Container(
                     color: Colors.deepPurple,
                     height: 50,
-                    child: Image.asset(
-                      contact.avatarUrl,
+                    child: Image.network(
+                      contact.photoUrl,
                     ),
                   ),
                 ),
@@ -107,7 +110,8 @@ class ChatPage extends StatelessWidget {
             ),
             Expanded(
               child: StreamBuilder(
-                stream: ChatsData().getChat(),
+                stream:
+                    FirebaseRepository().getChatStream(friendUid: contact.uid),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   switch (snapshot.connectionState) {
@@ -127,11 +131,11 @@ class ChatPage extends StatelessWidget {
                         List<MessageModel> messages =
                             (snapshot.data as List<MessageModel>);
                         return ListView.builder(
-                          padding:
-                              EdgeInsets.only(left: 15, right: 15, top: 10),
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, top: 10),
                           itemCount: messages.length,
-                          itemBuilder: (context, index) =>
-                              MessageCard(message: messages[index]),
+                          itemBuilder: (context, index) => MessageCard(
+                              message: messages[index], userUid: user.uid),
                         );
                       } else {
                         return const Text(
